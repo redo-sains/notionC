@@ -1,10 +1,12 @@
-import {Toaster} from "sonner"
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import {Toaster} from "sonner";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 
-import { ThemeProvider } from '@/components/providers/theme-provider'
-import { ConvexClientProvide } from '@/components/providers/convex-provider'
-import { ModalProvider } from "@/components/providers/modal-provider"
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { ConvexClientProvide } from '@/components/providers/convex-provider';
+import { ModalProvider } from "@/components/providers/modal-provider";
+
+import { EdgeStoreProvider } from "@/lib/edgestore"
 
 import './globals.css'
 
@@ -38,17 +40,19 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ConvexClientProvide>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-            storageKey='jotion-theme-2'
-          >
-            <Toaster position="bottom-center" />
-            <ModalProvider />
-            {children}
-          </ThemeProvider>
+          <EdgeStoreProvider>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+              storageKey='jotion-theme-2'
+            >
+              <Toaster position="bottom-center" />
+              <ModalProvider />
+              {children}
+            </ThemeProvider>
+          </EdgeStoreProvider>
         </ConvexClientProvide>
       </body>
     </html>
