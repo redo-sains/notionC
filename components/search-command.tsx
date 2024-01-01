@@ -60,8 +60,8 @@ export const SearchCommand = () => {
                 <CommandGroup heading="Documents">
                     {documents?.map((document) => (
                         <CommandItem
-                            key={document._id}
-                            value={`${document._id}-${document.title}`}
+                            key={`${document._id}-${document.title}`}
+                            value={document._id}
                             onSelect={onSelect}
                         >
                             {document.icon ? (

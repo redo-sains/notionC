@@ -12,6 +12,7 @@ import {
 
 import "@blocknote/core/style.css";
 import { useTheme } from "next-themes";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -19,22 +20,34 @@ interface EditorProps {
     editable?: boolean;
 }
 
-export const Editor = ({
+const Editor = ({
     onChange,
     editable,
     initialContent
 } : EditorProps) => {
     const { resolvedTheme } = useTheme();
+    const { edgestore } = useEdgeStore();
+
+    const handleUpload = async (file: File) => {
+        const response = await edgestore.publicFiles.upload({
+            file,
+        });
+
+        return response.url;
+    }
 
     const editor: BlockNoteEditor = useBlockNote({
         editable,
         initialContent: initialContent 
+        // @ts-ignore
         ? JSON.parse(initialContent) as PartialBlock[] 
         : undefined,
         onEditorContentChange: (editor) => {
             onChange(JSON.stringify(editor.topLevelBlocks, null, 2))
-        }
+        },
+        uploadFile: handleUpload,
     });
+
 
     return (
         <div>
@@ -45,3 +58,5 @@ export const Editor = ({
         </div>
     );
 }
+
+export default Editor;
